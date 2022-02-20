@@ -1,0 +1,9 @@
+dist/
+node_modules/
+index.html
+tsconfig.json
+tsconfig.node.json
+vite.config.tsconfig
+src/App.css
+src/App.tsx
+src/main.tsx
