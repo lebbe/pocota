@@ -1,5 +1,4 @@
 import React, { useContext, useRef, ReactNode } from 'react'
-import { getPTableJanitor } from './janitor'
 
 import {
   TableProps,
@@ -9,34 +8,52 @@ import {
   ThProps,
   TrProps,
 } from './Ptable.dt'
-import { useComponentId } from './utilHooks'
 
 export type Header = {
   content: ReactNode
 }
 
+/**
+ * We need to maintain information across the currently rendered table.
+ * I initially tried to use context, but since we are both updating and
+ * reading during the render, across tags/components, this failed hard due
+ * to rerender.
+ *
+ * Basically, I need to keep a record on all the table heads and column data,
+ * without triggering a rerender. And I guess a ref does this.
+ */
+export type PTableJanitor = {
+  headers: Header[]
+  insideHead: boolean
+  currentIndex: number
+}
+
 type TableContextType = {
   mobile: boolean
-  tableId: number
   numberOfHeads: number
+  janitor: React.MutableRefObject<PTableJanitor>
 }
 
 const TableContext = React.createContext<TableContextType>({
   mobile: false,
-  tableId: -1,
   numberOfHeads: 0,
+  // @ts-expect-error cannot initialize with useRef outside of hooks/component
+  janitor: undefined,
 })
 
 export function Table(props: TableProps & { mobile: boolean }) {
   const { mobile, ...rest } = props
-  const tableId = useComponentId()
 
   return (
     <TableContext.Provider
       value={{
         mobile,
-        tableId,
         numberOfHeads: 0,
+        janitor: useRef<PTableJanitor>({
+          currentIndex: -1,
+          headers: [],
+          insideHead: false,
+        }),
       }}
     >
       <table {...rest} />
@@ -46,7 +63,7 @@ export function Table(props: TableProps & { mobile: boolean }) {
 
 export function Thead(props: TheadProps) {
   const context = useContext(TableContext)
-  const janitor = getPTableJanitor(context.tableId)
+  const janitor = context.janitor.current
 
   janitor.insideHead = true
   return <thead {...props} />
@@ -54,7 +71,7 @@ export function Thead(props: TheadProps) {
 
 export function Th(props: ThProps) {
   const context = useContext(TableContext)
-  const janitor = getPTableJanitor(context.tableId)
+  const janitor = context.janitor.current
 
   janitor.headers.push({
     content: props.children,
@@ -65,7 +82,7 @@ export function Th(props: ThProps) {
 
 export function Tbody(props: TbodyProps) {
   const context = useContext(TableContext)
-  const janitor = getPTableJanitor(context.tableId)
+  const janitor = context.janitor.current
   const ref = useRef(null)
   context.numberOfHeads = janitor.headers.length
   janitor.insideHead = false
@@ -78,7 +95,7 @@ export function Tbody(props: TbodyProps) {
 
 export function Tr(props: TrProps) {
   const context = useContext(TableContext)
-  const janitor = getPTableJanitor(context.tableId)
+  const janitor = context.janitor.current
 
   janitor.currentIndex = 0
 
@@ -94,7 +111,7 @@ export function Tr(props: TrProps) {
 
 export function Td(props: TdProps) {
   const context = useContext(TableContext)
-  const janitor = getPTableJanitor(context.tableId)
+  const janitor = context.janitor.current
   const currentIndex = janitor.currentIndex++
   const { content } = janitor.headers[currentIndex]
 
