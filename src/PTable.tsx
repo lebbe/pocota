@@ -1,4 +1,10 @@
-import React, { useContext, useRef, ReactNode } from 'react'
+import React, {
+  useContext,
+  useRef,
+  ReactNode,
+  useLayoutEffect,
+  useState,
+} from 'react'
 
 import {
   TableProps,
@@ -50,7 +56,7 @@ export function Table(props: TableProps & { mobile: boolean }) {
         mobile,
         numberOfHeads: 0,
         janitor: useRef<PTableJanitor>({
-          currentIndex: -1,
+          currentIndex: 0,
           headers: [],
           insideHead: false,
         }),
@@ -66,6 +72,7 @@ export function Thead(props: TheadProps) {
   const janitor = context.janitor.current
 
   janitor.insideHead = true
+  janitor.headers = []
   return <thead {...props} />
 }
 
@@ -73,9 +80,11 @@ export function Th(props: ThProps) {
   const context = useContext(TableContext)
   const janitor = context.janitor.current
 
-  janitor.headers.push({
-    content: props.children,
-  })
+  useLayoutEffect(function () {
+    janitor.headers.push({
+      content: props.children,
+    })
+  }, [])
 
   return !context.mobile ? <th {...props} /> : null
 }
@@ -97,8 +106,6 @@ export function Tr(props: TrProps) {
   const context = useContext(TableContext)
   const janitor = context.janitor.current
 
-  janitor.currentIndex = 0
-
   if (context.mobile) {
     if (janitor.insideHead) {
       // Not actually rendering anything, just gathering intel on heads
@@ -111,14 +118,21 @@ export function Tr(props: TrProps) {
 
 export function Td(props: TdProps) {
   const context = useContext(TableContext)
-  const janitor = context.janitor.current
-  const currentIndex = janitor.currentIndex++
-  const { content } = janitor.headers[currentIndex]
+  const [headerElement, setHeaderElement] = useState<ReactNode>(null)
+
+  useLayoutEffect(function () {
+    const janitor = context.janitor.current
+    setHeaderElement(janitor.headers[janitor.currentIndex++].content)
+
+    if (janitor.currentIndex === janitor.headers.length) {
+      janitor.currentIndex = 0
+    }
+  }, [])
 
   if (context.mobile) {
     return (
       <tr>
-        <td>{content}</td>
+        <td>{headerElement}</td>
         <td {...props} />
       </tr>
     )

@@ -8,7 +8,7 @@ function ExampleTable(props: { mobile: boolean }) {
       <caption>Table caption</caption>
       <Thead>
         <Tr>
-          <Th>CODE</Th>
+          <Th>CODE {props.mobile + ''}</Th>
           <Th>JEG SKAL FREM</Th>
           <Th>GJEM MEG</Th>
           <Th>INCH</Th>
@@ -20,7 +20,14 @@ function ExampleTable(props: { mobile: boolean }) {
           <Td>CES-9000</Td>
           <Td>50mt</Td>
           <Td>1/2"</Td>
+          <Td>asdf</Td>
+          <Td>Kangal / Coil</Td>
+        </Tr>
+        <Tr>
+          <Td>CES-9000</Td>
+          <Td>50mt</Td>
           <Td>1/2"</Td>
+          <Td>asdf</Td>
           <Td>Kangal / Coil</Td>
         </Tr>
       </Tbody>
