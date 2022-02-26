@@ -17,6 +17,8 @@ import {
 
 export type Header = {
   content: ReactNode
+  frontPromoted?: boolean
+  backPromoted?: boolean
 }
 
 /**
@@ -32,37 +34,37 @@ export type PTableJanitor = {
   headers: Header[]
   insideHead: boolean
   currentIndex: number
+  frontElement?: ReactNode
+  backElements: ReactNode[]
 }
 
 type TableContextType = {
   mobile: boolean
-  numberOfHeads: number
   janitor: React.MutableRefObject<PTableJanitor>
 }
 
 const TableContext = React.createContext<TableContextType>({
   mobile: false,
-  numberOfHeads: 0,
   // @ts-expect-error cannot initialize with useRef outside of hooks/component
   janitor: undefined,
 })
 
-export function Table(props: TableProps & { mobile: boolean }) {
-  const { mobile, ...rest } = props
-
+export function Table({ mobile, ...props }: TableProps & { mobile: boolean }) {
   return (
     <TableContext.Provider
       value={{
         mobile,
-        numberOfHeads: 0,
+
         janitor: useRef<PTableJanitor>({
           currentIndex: 0,
           headers: [],
           insideHead: false,
+          frontElement: null,
+          backElements: [],
         }),
       }}
     >
-      <table {...rest} />
+      <table {...props} />
     </TableContext.Provider>
   )
 }
@@ -76,53 +78,106 @@ export function Thead(props: TheadProps) {
   return <thead {...props} />
 }
 
-export function Th(props: ThProps) {
-  const context = useContext(TableContext)
-  const janitor = context.janitor.current
-
-  useLayoutEffect(function () {
-    janitor.headers.push({
-      content: props.children,
-    })
-  }, [])
-
-  return !context.mobile ? <th {...props} /> : null
-}
-
 export function Tbody(props: TbodyProps) {
   const context = useContext(TableContext)
   const janitor = context.janitor.current
   const ref = useRef(null)
-  context.numberOfHeads = janitor.headers.length
   janitor.insideHead = false
 
-  if (context.mobile) {
-    return <>{props.children}</>
-  }
   return <tbody ref={ref} {...props} />
 }
 
 export function Tr(props: TrProps) {
   const context = useContext(TableContext)
   const janitor = context.janitor.current
+  const [front, setFront] = useState<ReactNode>([])
+  const [back, setBack] = useState<ReactNode[]>([])
+  const [inHead, setInHead] = useState(janitor.insideHead)
+
+  useLayoutEffect(function () {
+    const janitor = context.janitor.current
+    setFront(janitor.frontElement)
+    setBack(janitor.backElements)
+    janitor.frontElement = null
+    janitor.backElements = []
+  }, [])
 
   if (context.mobile) {
-    if (janitor.insideHead) {
+    if (inHead) {
       // Not actually rendering anything, just gathering intel on heads
-      return <>{props.children}</>
+      return <tr>{props.children}</tr>
     }
-    return <tbody>{props.children}</tbody>
+    return (
+      <tr {...props}>
+        {front != null && <td>{front}</td>}
+        <td>
+          <table>
+            <tbody>{props.children}</tbody>
+          </table>
+        </td>
+        {back.map((content, i) => (
+          <td key={i}>{content}</td>
+        ))}
+      </tr>
+    )
   }
   return <tr {...props} />
 }
 
+export function Th({
+  front,
+  back,
+  ...rest
+}: ThProps & { front?: boolean; back?: boolean }) {
+  const context = useContext(TableContext)
+  const janitor = context.janitor.current
+
+  useLayoutEffect(function () {
+    janitor.headers.push({
+      content: rest.children,
+      frontPromoted: front,
+      backPromoted: back,
+    })
+  }, [])
+
+  if (context.mobile) {
+    if (front) {
+      return (
+        <>
+          <th>{rest.children}</th>
+          <th>Details</th>
+        </>
+      )
+    }
+    if (back) {
+      return <th>{rest.children}</th>
+    }
+  }
+
+  return !context.mobile ? <th {...rest} /> : null
+}
 export function Td(props: TdProps) {
   const context = useContext(TableContext)
   const [headerElement, setHeaderElement] = useState<ReactNode>(null)
+  const [promoted, setPromoted] = useState(false)
 
   useLayoutEffect(function () {
     const janitor = context.janitor.current
-    setHeaderElement(janitor.headers[janitor.currentIndex++].content)
+    const header = janitor.headers[janitor.currentIndex++]
+    setHeaderElement(header.content)
+
+    if (header.backPromoted) {
+      janitor.backElements.push(props.children)
+      setPromoted(true)
+    }
+
+    if (header.frontPromoted) {
+      if (janitor.frontElement !== null) {
+        throw 'You can only promote one column to the front.'
+      }
+      janitor.frontElement = props.children
+      setPromoted(true)
+    }
 
     if (janitor.currentIndex === janitor.headers.length) {
       janitor.currentIndex = 0
@@ -130,6 +185,9 @@ export function Td(props: TdProps) {
   }, [])
 
   if (context.mobile) {
+    if (promoted) {
+      return null
+    }
     return (
       <tr>
         <td>{headerElement}</td>

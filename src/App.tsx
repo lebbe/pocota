@@ -35,12 +35,63 @@ function ExampleTable(props: { mobile: boolean }) {
   )
 }
 
+function ContactsTable({ mobile }: { mobile: boolean }) {
+  const haha = [1, 2, 3, 4, 5, 6]
+  const [selected, setSelected] = useState([!1, !1, !1, !1, !1, !1])
+  return (
+    <Table mobile={mobile}>
+      <Thead>
+        <Tr>
+          <Th front>
+            <input type="checkbox" />
+          </Th>
+          <Th>Name</Th>
+          <Th>Surname</Th>
+          <Th>Phone number</Th>
+          <Th>E-mail</Th>
+          <Th back>Tags</Th>
+          <Th back>Edit</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {haha.map((a) => (
+          <Tr key={a}>
+            <Td>
+              <input
+                type="checkbox"
+                checked={selected[a]}
+                onChange={function (e) {
+                  const newSelected = [...selected]
+                  console.log(e.target.checked)
+                  newSelected[a] = e.target.checked
+                  setSelected(newSelected)
+                }}
+              />
+            </Td>
+            <Td>Wan</Td>
+            <Td>Gengsin</Td>
+            <Td>834-434-3534</Td>
+            <Td>wan.gengsin@gmail.com</Td>
+            <Td>
+              <span>Friend</span>
+            </Td>
+            <Td>
+              <span className="material-icons">mode_edit</span>
+              <span className="material-icons">delete</span>
+            </Td>
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
+  )
+}
+
 function App() {
   return (
     <div className="App">
-      <ExampleTable mobile={true}></ExampleTable>
+      <ContactsTable mobile={true}></ContactsTable>
       <p />
-      <ExampleTable mobile={false}></ExampleTable>
+      <ContactsTable mobile={false}></ContactsTable>
     </div>
   )
 }
