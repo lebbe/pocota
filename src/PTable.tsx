@@ -14,6 +14,7 @@ import {
   ThProps,
   TrProps,
 } from './Ptable.dt'
+import { AddSubscriber, useSubscribeForRender } from './useSubscribeForRender'
 
 export type Header = {
   content: ReactNode
@@ -34,8 +35,11 @@ export type PTableJanitor = {
   headers: Header[]
   insideHead: boolean
   currentIndex: number
+  // Used temporarily for each row
   frontElement?: ReactNode
+  addFrontCellSubscriber?: AddSubscriber
   backElements: ReactNode[]
+  addBackCellSubscribers: AddSubscriber[]
 }
 
 type TableContextType = {
@@ -61,6 +65,8 @@ export function Table({ mobile, ...props }: TableProps & { mobile: boolean }) {
           insideHead: false,
           frontElement: null,
           backElements: [],
+          addFrontCellSubscriber: undefined,
+          addBackCellSubscribers: [],
         }),
       }}
     >
@@ -90,16 +96,37 @@ export function Tbody(props: TbodyProps) {
 export function Tr(props: TrProps) {
   const context = useContext(TableContext)
   const janitor = context.janitor.current
-  const [front, setFront] = useState<ReactNode>([])
+  const [front, setFront] = useState<ReactNode>(null)
   const [back, setBack] = useState<ReactNode[]>([])
   const [inHead, setInHead] = useState(janitor.insideHead)
 
   useLayoutEffect(function () {
     const janitor = context.janitor.current
-    setFront(janitor.frontElement)
-    setBack(janitor.backElements)
+    if (janitor.addFrontCellSubscriber) {
+      setFront(janitor.frontElement)
+
+      janitor.addFrontCellSubscriber(function (front: ReactNode) {
+        setFront(front)
+      })
+    }
+
+    if (janitor.backElements.length > 0) {
+      setBack(janitor.backElements)
+      for (let i = 0; i < janitor.backElements.length; i++) {
+        janitor.addBackCellSubscribers[i](function (td: ReactNode) {
+          setBack(function (oldBack) {
+            const newBack = [...oldBack]
+            newBack[i] = td
+            return newBack
+          })
+        })
+      }
+    }
+
     janitor.frontElement = null
     janitor.backElements = []
+    janitor.addFrontCellSubscriber = undefined
+    janitor.addBackCellSubscribers = []
   }, [])
 
   if (context.mobile) {
@@ -148,18 +175,22 @@ export function Th({
           <th>Details</th>
         </>
       )
-    }
-    if (back) {
+    } else if (back) {
       return <th>{rest.children}</th>
     }
+
+    return null
   }
 
-  return !context.mobile ? <th {...rest} /> : null
+  return <th {...rest} />
 }
+
 export function Td(props: TdProps) {
   const context = useContext(TableContext)
   const [headerElement, setHeaderElement] = useState<ReactNode>(null)
   const [promoted, setPromoted] = useState(false)
+
+  const addSubscriber = useSubscribeForRender(props.children)
 
   useLayoutEffect(function () {
     const janitor = context.janitor.current
@@ -167,8 +198,13 @@ export function Td(props: TdProps) {
     setHeaderElement(header.content)
 
     if (header.backPromoted) {
-      janitor.backElements.push(props.children)
+      if (header.frontPromoted) {
+        throw 'A column can only be in the front or in the back, not both.'
+      }
+
       setPromoted(true)
+      janitor.addBackCellSubscribers.push(addSubscriber)
+      janitor.backElements.push(props.children)
     }
 
     if (header.frontPromoted) {
@@ -176,6 +212,7 @@ export function Td(props: TdProps) {
         throw 'You can only promote one column to the front.'
       }
       janitor.frontElement = props.children
+      janitor.addFrontCellSubscriber = addSubscriber
       setPromoted(true)
     }
 

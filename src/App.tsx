@@ -36,14 +36,21 @@ function ExampleTable(props: { mobile: boolean }) {
 }
 
 function ContactsTable({ mobile }: { mobile: boolean }) {
-  const haha = [1, 2, 3, 4, 5, 6]
   const [selected, setSelected] = useState([!1, !1, !1, !1, !1, !1])
   return (
     <Table mobile={mobile}>
       <Thead>
         <Tr>
           <Th front>
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              checked={!selected.some((a) => !a)}
+              onChange={(e) => {
+                const isChecked = e.target.checked
+                const newSelected = new Array(selected.length).fill(isChecked)
+                setSelected(newSelected)
+              }}
+            />
           </Th>
           <Th>Name</Th>
           <Th>Surname</Th>
@@ -54,16 +61,16 @@ function ContactsTable({ mobile }: { mobile: boolean }) {
         </Tr>
       </Thead>
       <Tbody>
-        {haha.map((a) => (
+        {selected.map((e, a) => (
           <Tr key={a}>
             <Td>
               <input
                 type="checkbox"
                 checked={selected[a]}
-                onChange={function (e) {
+                onChange={(e) => {
+                  const isChecked = e.target.checked
                   const newSelected = [...selected]
-                  console.log(e.target.checked)
-                  newSelected[a] = e.target.checked
+                  newSelected[a] = isChecked
                   setSelected(newSelected)
                 }}
               />
