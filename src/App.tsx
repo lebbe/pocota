@@ -56,8 +56,8 @@ function ContactsTable({ mobile }: { mobile: boolean }) {
           <Th>Surname</Th>
           <Th>Phone number</Th>
           <Th>E-mail</Th>
-          <Th back>Tags</Th>
-          <Th back>Edit</Th>
+          <Th>Tags</Th>
+          <Th>Edit</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -98,7 +98,9 @@ function App() {
     <div className="App">
       <ContactsTable mobile={true}></ContactsTable>
       <p />
-      <ContactsTable mobile={false}></ContactsTable>
+      {
+        //<ContactsTable mobile={false}></ContactsTable>
+      }
     </div>
   )
 }

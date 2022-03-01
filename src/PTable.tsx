@@ -20,6 +20,7 @@ export type Header = {
   content: ReactNode
   frontPromoted?: boolean
   backPromoted?: boolean
+  addSubscriber: AddSubscriber
 }
 
 /**
@@ -33,7 +34,6 @@ export type Header = {
  */
 export type PTableJanitor = {
   headers: Header[]
-  insideHead: boolean
   currentIndex: number
   // Used temporarily for each row
   frontElement?: ReactNode
@@ -53,6 +53,14 @@ const TableContext = React.createContext<TableContextType>({
   janitor: undefined,
 })
 
+type HeaderContextType = {
+  insideHeader: boolean
+}
+
+const HeaderContext = React.createContext<HeaderContextType>({
+  insideHeader: false,
+})
+
 export function Table({ mobile, ...props }: TableProps & { mobile: boolean }) {
   return (
     <TableContext.Provider
@@ -62,7 +70,6 @@ export function Table({ mobile, ...props }: TableProps & { mobile: boolean }) {
         janitor: useRef<PTableJanitor>({
           currentIndex: 0,
           headers: [],
-          insideHead: false,
           frontElement: null,
           backElements: [],
           addFrontCellSubscriber: undefined,
@@ -78,29 +85,61 @@ export function Table({ mobile, ...props }: TableProps & { mobile: boolean }) {
 export function Thead(props: TheadProps) {
   const context = useContext(TableContext)
   const janitor = context.janitor.current
+  const [headers, setHeaders] = useState<Header[]>([])
 
-  janitor.insideHead = true
   janitor.headers = []
+  useLayoutEffect(function () {
+    if (!context.mobile) return
+
+    setHeaders(janitor.headers)
+    for (let i = 0; i < janitor.headers.length; i++) {
+      janitor.headers[i].addSubscriber(function (th: ReactNode) {
+        setHeaders(function (oldHeaders) {
+          const newHeaders = [...oldHeaders]
+          newHeaders[i].content = th
+          return newHeaders
+        })
+      })
+    }
+  }, [])
+
+  if (context.mobile) {
+    const frontHead = headers.find((a) => a.frontPromoted)
+    return (
+      <>
+        <HeaderContext.Provider value={{ insideHeader: true }}>
+          {props.children}
+        </HeaderContext.Provider>
+        <thead>
+          <tr>
+            {frontHead && <th>{frontHead.content}</th>}
+            <td>Details</td>
+            {headers
+              .filter((a) => a.backPromoted)
+              .map((a, i) => (
+                <th key={i}>{a.content}</th>
+              ))}
+          </tr>
+        </thead>
+      </>
+    )
+  }
   return <thead {...props} />
 }
 
 export function Tbody(props: TbodyProps) {
-  const context = useContext(TableContext)
-  const janitor = context.janitor.current
-  const ref = useRef(null)
-  janitor.insideHead = false
-
-  return <tbody ref={ref} {...props} />
+  return <tbody {...props} />
 }
 
 export function Tr(props: TrProps) {
   const context = useContext(TableContext)
-  const janitor = context.janitor.current
+  const inHead = useContext(HeaderContext).insideHeader
   const [front, setFront] = useState<ReactNode>(null)
   const [back, setBack] = useState<ReactNode[]>([])
-  const [inHead, setInHead] = useState(janitor.insideHead)
 
   useLayoutEffect(function () {
+    if (!context.mobile) return
+
     const janitor = context.janitor.current
     if (janitor.addFrontCellSubscriber) {
       setFront(janitor.frontElement)
@@ -132,7 +171,7 @@ export function Tr(props: TrProps) {
   if (context.mobile) {
     if (inHead) {
       // Not actually rendering anything, just gathering intel on heads
-      return <tr>{props.children}</tr>
+      return <>{props.children}</>
     }
     return (
       <tr {...props}>
@@ -158,27 +197,18 @@ export function Th({
 }: ThProps & { front?: boolean; back?: boolean }) {
   const context = useContext(TableContext)
   const janitor = context.janitor.current
-
+  const addSubscriber = useSubscribeForRender(rest.children)
   useLayoutEffect(function () {
+    if (!context.mobile) return
     janitor.headers.push({
       content: rest.children,
       frontPromoted: front,
       backPromoted: back,
+      addSubscriber: addSubscriber,
     })
   }, [])
 
   if (context.mobile) {
-    if (front) {
-      return (
-        <>
-          <th>{rest.children}</th>
-          <th>Details</th>
-        </>
-      )
-    } else if (back) {
-      return <th>{rest.children}</th>
-    }
-
     return null
   }
 
@@ -193,6 +223,7 @@ export function Td(props: TdProps) {
   const addSubscriber = useSubscribeForRender(props.children)
 
   useLayoutEffect(function () {
+    if (!context.mobile) return
     const janitor = context.janitor.current
     const header = janitor.headers[janitor.currentIndex++]
     setHeaderElement(header.content)
