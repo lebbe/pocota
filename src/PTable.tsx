@@ -43,12 +43,12 @@ export type PTableJanitor = {
 }
 
 type TableContextType = {
-  mobile: boolean
+  rotate: boolean
   janitor: React.MutableRefObject<PTableJanitor>
 }
 
 const TableContext = React.createContext<TableContextType>({
-  mobile: false,
+  rotate: false,
   // @ts-expect-error cannot initialize with useRef outside of hooks/component
   janitor: undefined,
 })
@@ -61,11 +61,11 @@ const HeaderContext = React.createContext<HeaderContextType>({
   insideHeader: false,
 })
 
-export function Table({ mobile, ...props }: TableProps & { mobile: boolean }) {
+export function Table({ rotate, ...props }: TableProps & { rotate: boolean }) {
   return (
     <TableContext.Provider
       value={{
-        mobile,
+        rotate,
 
         janitor: useRef<PTableJanitor>({
           currentIndex: 0,
@@ -89,7 +89,7 @@ export function Thead(props: TheadProps) {
 
   janitor.headers = []
   useLayoutEffect(function () {
-    if (!context.mobile) return
+    if (!context.rotate) return
 
     setHeaders(janitor.headers)
     for (let i = 0; i < janitor.headers.length; i++) {
@@ -103,7 +103,7 @@ export function Thead(props: TheadProps) {
     }
   }, [])
 
-  if (context.mobile) {
+  if (context.rotate) {
     const frontHead = headers.find((a) => a.frontPromoted)
     return (
       <>
@@ -138,7 +138,7 @@ export function Tr(props: TrProps) {
   const [back, setBack] = useState<ReactNode[]>([])
 
   useLayoutEffect(function () {
-    if (!context.mobile) return
+    if (!context.rotate) return
 
     const janitor = context.janitor.current
     if (janitor.addFrontCellSubscriber) {
@@ -168,7 +168,7 @@ export function Tr(props: TrProps) {
     janitor.addBackCellSubscribers = []
   }, [])
 
-  if (context.mobile) {
+  if (context.rotate) {
     if (inHead) {
       // Not actually rendering anything, just gathering intel on heads
       return <>{props.children}</>
@@ -199,7 +199,7 @@ export function Th({
   const janitor = context.janitor.current
   const addSubscriber = useSubscribeForRender(rest.children)
   useLayoutEffect(function () {
-    if (!context.mobile) return
+    if (!context.rotate) return
     janitor.headers.push({
       content: rest.children,
       frontPromoted: front,
@@ -208,7 +208,7 @@ export function Th({
     })
   }, [])
 
-  if (context.mobile) {
+  if (context.rotate) {
     return null
   }
 
@@ -223,7 +223,7 @@ export function Td(props: TdProps) {
   const addSubscriber = useSubscribeForRender(props.children)
 
   useLayoutEffect(function () {
-    if (!context.mobile) return
+    if (!context.rotate) return
     const janitor = context.janitor.current
     const header = janitor.headers[janitor.currentIndex++]
     setHeaderElement(header.content)
@@ -252,7 +252,7 @@ export function Td(props: TdProps) {
     }
   }, [])
 
-  if (context.mobile) {
+  if (context.rotate) {
     if (promoted) {
       return null
     }

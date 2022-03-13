@@ -4,7 +4,7 @@ import { Table, Tbody, Td, Th, Thead, Tr } from './PTable'
 
 function ExampleTable(props: { mobile: boolean }) {
   return (
-    <Table mobile={props.mobile}>
+    <Table rotate={props.mobile}>
       <caption>Table caption</caption>
       <Thead>
         <Tr>
@@ -38,10 +38,10 @@ function ExampleTable(props: { mobile: boolean }) {
 function ContactsTable({ mobile }: { mobile: boolean }) {
   const [selected, setSelected] = useState([!1, !1, !1, !1, !1, !1])
   return (
-    <Table mobile={mobile}>
+    <Table rotate={mobile}>
       <Thead>
         <Tr>
-          <Th front>
+          <Th back>
             <input
               type="checkbox"
               checked={!selected.some((a) => !a)}
@@ -99,7 +99,7 @@ function App() {
       <ContactsTable mobile={true}></ContactsTable>
       <p />
       {
-        //<ContactsTable mobile={false}></ContactsTable>
+        //
       }
     </div>
   )
