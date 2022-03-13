@@ -113,7 +113,7 @@ export function Thead(props: TheadProps) {
         <thead>
           <tr>
             {frontHead && <th>{frontHead.content}</th>}
-            <td>Details</td>
+            <th>Details</th>
             {headers
               .filter((a) => a.backPromoted)
               .map((a, i) => (

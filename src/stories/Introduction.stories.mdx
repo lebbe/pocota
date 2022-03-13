@@ -1,10 +1,30 @@
-# Pocota tables: Polymorphic Compositional Tables
+import { Meta } from '@storybook/addon-docs'
+import pocotaImageFile from './assets/Pocota_personata.jpg'
 
-Pocota tables is a React 17 responsive table component, that supports a native HTML like experience when creating tables. The output is a simple pure HTML table, that you can style to your own likings.
+export const pocotaImage = {
+  src: pocotaImageFile,
+  alt: 'Image of a pocota fly',
+}
 
-Pocota can be combined with all sorts of React tools for supporting infinite scroll, sorting, customizable theming, etc. But this library doesn't provide any of this in itself, it provides a simple and straight forward way of making HTML tables, for people who prefer to write their markups as markup, and not as an entangled mess of data-structures.
+<Meta title="Getting started/Introduction" />
 
-See examples [here](https://lebbe.github.io/pocota/).
+# Pocota table
+
+Pocota tables is a React 17 responsive table component, that supports a native HTML
+like experience when creating tables. The output is a simple pure HTML table, that
+you can style to your own likings.
+
+Pocota can be combined with all sorts of React tools for supporting infinite scroll,
+sorting, customizable theming, etc. But this library doesn't provide any of this in
+itself, it provides a simple and straightforward way of making resposnive HTML tables,
+for people who prefer to write their markups as markup, and not as an entangled
+mess of data-structures.
+
+<img
+  src={pocotaImage.src}
+  alt="Image of a pocota fly"
+  style={{ maxWidth: 400, width: '100%' }}
+/>
 
 ## Polymorphic
 
@@ -16,7 +36,7 @@ It is hard to find any table component for React similar to this one. Instead of
 
 This means that you dont have to know advanced programming concepts to start using Pocota. You write the table out plain and regular, and we take care of the polymorphism behind the scenes. Everything you need to remember, is to start the tag name with a big letter (except for the cases where you want a table caption):
 
-```
+```[React]
 <Table>
   <caption>This is a simple table</caption>
   <Thead>

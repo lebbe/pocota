@@ -1,44 +1,15 @@
 import { useState } from 'react'
-import './App.css'
-import { Table, Tbody, Td, Th, Thead, Tr } from './PTable'
+import { Table, Tbody, Td, Th, Thead, Tr } from '../PTable'
 
-function ExampleTable(props: { mobile: boolean }) {
-  return (
-    <Table rotate={props.mobile}>
-      <caption>Table caption</caption>
-      <Thead>
-        <Tr>
-          <Th>CODE {props.mobile + ''}</Th>
-          <Th>JEG SKAL FREM</Th>
-          <Th>GJEM MEG</Th>
-          <Th>INCH</Th>
-          <Th>BOX TYPE</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        <Tr>
-          <Td>CES-9000</Td>
-          <Td>50mt</Td>
-          <Td>1/2"</Td>
-          <Td>asdf</Td>
-          <Td>Kangal / Coil</Td>
-        </Tr>
-        <Tr>
-          <Td>CES-9000</Td>
-          <Td>50mt</Td>
-          <Td>1/2"</Td>
-          <Td>asdf</Td>
-          <Td>Kangal / Coil</Td>
-        </Tr>
-      </Tbody>
-    </Table>
-  )
-}
+import './table.css'
 
-function ContactsTable({ mobile }: { mobile: boolean }) {
+export function ContactsTable({ mobile }: { mobile: boolean }) {
   const [selected, setSelected] = useState([!1, !1, !1, !1, !1, !1])
+
+  const className = mobile ? 'rotated' : 'ordinary'
+
   return (
-    <Table rotate={mobile}>
+    <Table className={className} rotate={mobile}>
       <Thead>
         <Tr>
           <Th back>
@@ -83,8 +54,8 @@ function ContactsTable({ mobile }: { mobile: boolean }) {
               <span>Friend</span>
             </Td>
             <Td>
-              <span className="material-icons">mode_edit</span>
-              <span className="material-icons">delete</span>
+              <span className="icon">✏️</span>
+              <span className="icon">🗑️</span>
             </Td>
           </Tr>
         ))}
@@ -92,17 +63,3 @@ function ContactsTable({ mobile }: { mobile: boolean }) {
     </Table>
   )
 }
-
-function App() {
-  return (
-    <div className="App">
-      <ContactsTable mobile={true}></ContactsTable>
-      <p />
-      {
-        //
-      }
-    </div>
-  )
-}
-
-export default App
