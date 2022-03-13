@@ -57,7 +57,7 @@ function ContactsTable({ mobile }: { mobile: boolean }) {
           <Th>Phone number</Th>
           <Th>E-mail</Th>
           <Th>Tags</Th>
-          <Th>Edit</Th>
+          <Th front>Edit</Th>
         </Tr>
       </Thead>
       <Tbody>

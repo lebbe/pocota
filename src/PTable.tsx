@@ -177,9 +177,7 @@ export function Tr(props: TrProps) {
       <tr {...props}>
         {front != null && <td>{front}</td>}
         <td>
-          <table>
-            <tbody>{props.children}</tbody>
-          </table>
+          <dl>{props.children}</dl>
         </td>
         {back.map((content, i) => (
           <td key={i}>{content}</td>
@@ -257,10 +255,10 @@ export function Td(props: TdProps) {
       return null
     }
     return (
-      <tr>
-        <td>{headerElement}</td>
-        <td {...props} />
-      </tr>
+      <div>
+        <dt>{headerElement}</dt>
+        <dd {...props} />
+      </div>
     )
   }
 
