@@ -1,7 +1,6 @@
 node_modules/
-index.html
 tsconfig.json
 tsconfig.node.json
 vite.config.tsconfig
 src/stories/
-storybook-static/
+docs/
