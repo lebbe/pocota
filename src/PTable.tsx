@@ -89,7 +89,7 @@ export function Thead(props: TheadProps) {
 
   janitor.headers = []
   useLayoutEffect(function () {
-    if (!context.rotate) return
+    // if (!context.rotate) return
 
     setHeaders(janitor.headers)
     for (let i = 0; i < janitor.headers.length; i++) {
@@ -138,7 +138,7 @@ export function Tr(props: TrProps) {
   const [back, setBack] = useState<ReactNode[]>([])
 
   useLayoutEffect(function () {
-    if (!context.rotate) return
+    // if (!context.rotate) return
 
     const janitor = context.janitor.current
     if (janitor.addFrontCellSubscriber) {
@@ -197,7 +197,7 @@ export function Th({
   const janitor = context.janitor.current
   const addSubscriber = useSubscribeForRender(rest.children)
   useLayoutEffect(function () {
-    if (!context.rotate) return
+    // if (!context.rotate) return
     janitor.headers.push({
       content: rest.children,
       frontPromoted: front,
@@ -221,7 +221,7 @@ export function Td(props: TdProps) {
   const addSubscriber = useSubscribeForRender(props.children)
 
   useLayoutEffect(function () {
-    if (!context.rotate) return
+    //  if (!context.rotate) return
     const janitor = context.janitor.current
     const header = janitor.headers[janitor.currentIndex++]
     setHeaderElement(header.content)
@@ -237,7 +237,10 @@ export function Td(props: TdProps) {
     }
 
     if (header.frontPromoted) {
-      if (janitor.frontElement !== null) {
+      if (
+        janitor.frontElement !== null &&
+        janitor.frontElement !== props.children
+      ) {
         throw 'You can only promote one column to the front.'
       }
       janitor.frontElement = props.children
