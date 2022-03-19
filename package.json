@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
+    "@faker-js/faker": "^6.0.0",
     "@storybook/addon-actions": "^6.4.19",
     "@storybook/addon-essentials": "^6.4.19",
     "@storybook/addon-interactions": "^6.4.19",
@@ -30,6 +31,5 @@
   "prettier": {
     "singleQuote": true,
     "semi": false
-  },
-  "dependencies": {}
+  }
 }
