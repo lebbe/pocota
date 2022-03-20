@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Table, Tbody, Td, Th, Thead, Tr } from '../PTable'
+import { Table, Tbody, Td, Th, Thead, Tr } from '../'
 import { ContactsTable } from './ContactsTable'
 
 export default {

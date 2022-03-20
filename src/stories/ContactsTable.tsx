@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Table, Tbody, Td, Th, Thead, Tr } from '../PTable'
+import { Table, Tbody, Td, Th, Thead, Tr } from '../'
 
 import './table.css'
 

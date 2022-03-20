@@ -1,4 +1,4 @@
-import { Table, Tbody, Td, Th, Thead, Tr } from '../PTable'
+import { Table, Tbody, Td, Th, Thead, Tr } from '../'
 
 import { PersonCard, useFetchPeople } from '../hooks/useFetchPeople'
 import { useSorter } from '../hooks/useSorter'
