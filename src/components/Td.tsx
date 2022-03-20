@@ -1,6 +1,6 @@
 import React, { ReactNode, useContext, useLayoutEffect, useState } from 'react'
 
-import { useSubscribeForRender } from '../useSubscribeForRender'
+import { useSubscribeForRender } from '../hooks/useSubscribeForRender'
 import { TableContext } from './Table'
 
 type TdProps = React.DetailedHTMLProps<

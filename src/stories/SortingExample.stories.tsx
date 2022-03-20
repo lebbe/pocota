@@ -1,6 +1,6 @@
 import { Table, Tbody, Td, Th, Thead, Tr } from '../'
 
-import { PersonCard, useFetchPeople } from '../hooks/useFetchPeople'
+import { PersonCard, useFetchPeople } from './hooks/useFetchPeople'
 import { useSorter } from '../hooks/useSorter'
 import React, { useState } from 'react'
 

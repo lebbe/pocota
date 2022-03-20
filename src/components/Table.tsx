@@ -1,5 +1,5 @@
 import React, { ReactNode, useRef } from 'react'
-import { AddSubscriber } from '../useSubscribeForRender'
+import { AddSubscriber } from '../hooks/useSubscribeForRender'
 
 type TableProps = React.DetailedHTMLProps<
   React.TableHTMLAttributes<HTMLTableElement>,
