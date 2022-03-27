@@ -8,7 +8,7 @@
     "build": "tsc --build --clean && tsc --build",
     "clean": "tsc --build --clean",
     "clean:test": "tsc --build tsconfig.tests.json --clean",
-    "test": "tsc --project tsconfig.tests.json && cd tests && node --experimental-vm-modules  ../node_modules/jest/bin/jest.js",
+    "test": "npm run clean:test && tsc --project tsconfig.tests.json && cd tests && node --experimental-vm-modules  ../node_modules/jest/bin/jest.js",
     "test:watch-ts": "tsc --project tsconfig.tests.json --watch",
     "test:watch": "cd tests && node --experimental-vm-modules ../node_modules/jest/bin/jest.js --watchAll"
   },
