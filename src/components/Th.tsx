@@ -8,24 +8,37 @@ type ThProps = React.DetailedHTMLProps<
   HTMLTableCellElement
 >
 
-export function Th({
+function ThRotated({
   front,
   back,
-  ...rest
+  ...props
 }: ThProps & { front?: boolean; back?: boolean }) {
   const context = useContext(TableContext)
-  if (!context.rotate) return <th {...rest} />
-
   const janitor = context.janitor.current
-  const addSubscriber = useSubscribeForRender(rest.children)
+  const addSubscriber = useSubscribeForRender(props.children)
+
   useLayoutEffect(function () {
     janitor.headers.push({
-      content: rest.children,
+      content: props.children,
       frontPromoted: front,
       backPromoted: back,
       addSubscriber: addSubscriber,
     })
+
+    return function () {
+      janitor.headers = []
+    }
   }, [])
 
   return null
+}
+
+export function Th({
+  front,
+  back,
+  ...props
+}: ThProps & { front?: boolean; back?: boolean }) {
+  const context = useContext(TableContext)
+  if (context.rotate) return <ThRotated front={front} back={back} {...props} />
+  return <th {...props} />
 }

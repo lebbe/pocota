@@ -14,9 +14,8 @@ export const HeaderContext = React.createContext<HeaderContextType>({
   insideHeader: false,
 })
 
-export function Thead(props: TheadProps) {
+function TheadRotated(props: TheadProps) {
   const context = useContext(TableContext)
-  if (!context.rotate) return <thead {...props} />
   const janitor = context.janitor.current
   const [headers, setHeaders] = useState<Header[]>([])
 
@@ -53,4 +52,11 @@ export function Thead(props: TheadProps) {
       </thead>
     </>
   )
+}
+
+export function Thead(props: TheadProps) {
+  const context = useContext(TableContext)
+  if (context.rotate) return <TheadRotated {...props} />
+
+  return <thead {...props} />
 }

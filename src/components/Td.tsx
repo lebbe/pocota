@@ -8,10 +8,8 @@ type TdProps = React.DetailedHTMLProps<
   HTMLTableCellElement
 >
 
-export function Td(props: TdProps) {
+function TdRotated(props: TdProps) {
   const context = useContext(TableContext)
-  if (!context.rotate) return <td {...props} />
-
   const [headerElement, setHeaderElement] = useState<ReactNode>(null)
   const [promoted, setPromoted] = useState(false)
 
@@ -49,17 +47,19 @@ export function Td(props: TdProps) {
     }
   }, [])
 
-  if (context.rotate) {
-    if (promoted) {
-      return null
-    }
-    return (
-      <div>
-        <dt>{headerElement}</dt>
-        <dd {...props} />
-      </div>
-    )
+  if (promoted) {
+    return null
   }
+  return (
+    <div>
+      <dt>{headerElement}</dt>
+      <dd {...props} />
+    </div>
+  )
+}
 
+export function Td(props: TdProps) {
+  const context = useContext(TableContext)
+  if (context.rotate) return <TdRotated {...props} />
   return <td {...props} />
 }

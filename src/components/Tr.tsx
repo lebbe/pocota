@@ -8,9 +8,8 @@ type TrProps = React.DetailedHTMLProps<
   HTMLTableRowElement
 >
 
-export function Tr(props: TrProps) {
+function TrRotated(props: TrProps) {
   const context = useContext(TableContext)
-  if (!context.rotate) return <tr {...props} />
   const inHead = useContext(HeaderContext).insideHeader
   const [front, setFront] = useState<ReactNode>(null)
   const [back, setBack] = useState<ReactNode[]>([])
@@ -44,22 +43,25 @@ export function Tr(props: TrProps) {
     janitor.addBackCellSubscribers = []
   }, [])
 
-  if (context.rotate) {
-    if (inHead) {
-      // Not actually rendering anything, just gathering intel on heads
-      return <>{props.children}</>
-    }
-    return (
-      <tr {...props}>
-        {front != null && <td>{front}</td>}
-        <td>
-          <dl>{props.children}</dl>
-        </td>
-        {back.map((content, i) => (
-          <td key={i}>{content}</td>
-        ))}
-      </tr>
-    )
+  if (inHead) {
+    // Not actually rendering anything, just gathering intel on heads
+    return <>{props.children}</>
   }
+  return (
+    <tr {...props}>
+      {front != null && <td>{front}</td>}
+      <td>
+        <dl>{props.children}</dl>
+      </td>
+      {back.map((content, i) => (
+        <td key={i}>{content}</td>
+      ))}
+    </tr>
+  )
+}
+
+export function Tr(props: TrProps) {
+  const context = useContext(TableContext)
+  if (context.rotate) return <TrRotated {...props} />
   return <tr {...props} />
 }
