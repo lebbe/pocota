@@ -1,6 +1,6 @@
 # Pocota tables: Polymorphic Compositional Tables
 
-[![Node.js CI](https://github.com/lebbe/pocota/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/lebbe/pocota/actions/workflows/node.js.yml)
+[![Tests](https://github.com/lebbe/pocota/actions/workflows/node.js.yml/badge.svg)](https://github.com/lebbe/pocota/actions/workflows/node.js.yml)
 
 Pocota tables is a React 17 responsive table component, that supports a native HTML like experience when creating tables. The output is a simple pure HTML table, that you can style to your own likings.
 
