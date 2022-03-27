@@ -51,7 +51,7 @@ function TheadRotated(props: TheadProps) {
           {headers
             .filter((a) => a.backPromoted)
             .map((a, i) => (
-              <th key={i} {...a.props} />
+              <th key={i}>{a.props}</th>
             ))}
         </tr>
       </thead>
