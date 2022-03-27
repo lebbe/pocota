@@ -34,6 +34,7 @@ export function Thead(props: TheadProps) {
   }, [])
 
   const frontHead = headers.find((a) => a.frontPromoted)
+
   return (
     <>
       <HeaderContext.Provider value={{ insideHeader: true }}>
@@ -42,7 +43,7 @@ export function Thead(props: TheadProps) {
       <thead>
         <tr>
           {frontHead && <th>{frontHead.content}</th>}
-          <th>Details</th>
+          <th>{context.detailsTitle}</th>
           {headers
             .filter((a) => a.backPromoted)
             .map((a, i) => (

@@ -35,6 +35,7 @@ export type PTableJanitor = {
 type TableContextType = {
   rotate: boolean
   janitor: React.MutableRefObject<PTableJanitor>
+  detailsTitle: React.ReactNode
 }
 
 export const TableContext = React.createContext<TableContextType>({
@@ -43,12 +44,16 @@ export const TableContext = React.createContext<TableContextType>({
   janitor: undefined,
 })
 
-export function Table({ rotate, ...props }: TableProps & { rotate: boolean }) {
+export function Table({
+  rotate,
+  detailsTitle,
+  ...props
+}: TableProps & { rotate: boolean; detailsTitle?: React.ReactNode }) {
   return (
     <TableContext.Provider
       value={{
         rotate,
-
+        detailsTitle: detailsTitle || 'Details',
         janitor: useRef<PTableJanitor>({
           currentIndex: 0,
           headers: [],
