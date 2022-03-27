@@ -22,3 +22,9 @@ dist
 *.njsproj
 *.sln
 *.sw?
+
+# Tests
+tests/index.js
+tests/components/
+tests/hooks/
+tests/tests/

@@ -2,25 +2,31 @@
   "name": "pocota",
   "description": "Polymorphic compositional tables in React.",
   "version": "0.0.1",
-  "main": "dist/Ptable.js",
-  "types": "dist/Ptable.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook -o ./docs"
+    "build": "tsc --build --clean && tsc --build",
+    "clean": "tsc --build --clean",
+    "clean:test": "tsc --build tsconfig.tests.json --clean",
+    "test": "tsc --project tsconfig.tests.json && cd tests && node --experimental-vm-modules  ../node_modules/jest/bin/jest.js",
+    "test:watch-ts": "tsc --project tsconfig.tests.json --watch",
+    "test:watch": "cd tests && node --experimental-vm-modules ../node_modules/jest/bin/jest.js --watchAll"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
     "react-dom": ">=17.0.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "5.16.3",
+    "@testing-library/react": "12.1.4",
     "@types/react": "17.0.43",
     "@types/react-dom": "17.0.14",
+    "jest": "27.5.1",
     "typescript": "4.6.3"
   },
   "prettier": {
     "singleQuote": true,
     "semi": false
-  }
+  },
+  "type": "module"
 }

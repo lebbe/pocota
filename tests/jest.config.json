@@ -1,0 +1,5 @@
+{
+  "clearMocks": true,
+  "testEnvironment": "jsdom",
+  "testMatch": ["<rootDir>/tests/**/*.js"]
+}

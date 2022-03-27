@@ -4,3 +4,4 @@ tsconfig.node.json
 vite.config.tsconfig
 src/stories/
 docs/
+tests/
