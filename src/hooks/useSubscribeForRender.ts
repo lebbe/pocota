@@ -1,6 +1,8 @@
 import { ReactNode, useEffect, useState } from 'react'
+import { TdProps } from '../components/Td'
+import { ThProps } from '../components/Th'
 
-export type Subscriber = (element: ReactNode) => void
+export type Subscriber = (props: ThProps | TdProps) => void
 export type AddSubscriber = (subscriber: Subscriber) => void
 
 /**
@@ -13,16 +15,16 @@ export type AddSubscriber = (subscriber: Subscriber) => void
  * its state for the promoted cells), I could sew it all together again.
  *
  */
-export function useSubscribeForRender(children: ReactNode): AddSubscriber {
+export function useSubscribeForRender(props: ThProps | TdProps): AddSubscriber {
   const [subscriber, setSubscriber] = useState<Subscriber>(
     () => (_element: ReactNode) => {}
   )
 
   useEffect(
     function () {
-      subscriber(children)
+      subscriber(props)
     },
-    [children, subscriber]
+    [props, subscriber]
   )
 
   function addSubscriber(fn: Subscriber) {

@@ -1,7 +1,8 @@
 import React, { ReactNode, useContext, useLayoutEffect, useState } from 'react'
 import { Header, TableContext } from './Table'
+import { ThProps, ThRotatedProps } from './Th'
 
-type TheadProps = React.DetailedHTMLProps<
+export type TheadProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLTableSectionElement>,
   HTMLTableSectionElement
 >
@@ -22,13 +23,17 @@ function TheadRotated(props: TheadProps) {
   useLayoutEffect(function () {
     setHeaders(janitor.headers)
     for (let i = 0; i < janitor.headers.length; i++) {
-      janitor.headers[i].addSubscriber(function (th: ReactNode) {
+      janitor.headers[i].addSubscriber(function (thProps: ThProps) {
         setHeaders(function (oldHeaders) {
           const newHeaders = [...oldHeaders]
-          newHeaders[i].content = th
+          newHeaders[i].props = thProps
           return newHeaders
         })
       })
+    }
+
+    return function () {
+      setHeaders([])
     }
   }, [])
 
@@ -41,12 +46,12 @@ function TheadRotated(props: TheadProps) {
       </HeaderContext.Provider>
       <thead>
         <tr>
-          {frontHead && <th>{frontHead.content}</th>}
+          {frontHead && <th {...frontHead.props} />}
           <th>{context.detailsTitle}</th>
           {headers
             .filter((a) => a.backPromoted)
             .map((a, i) => (
-              <th key={i}>{a.content}</th>
+              <th key={i} {...a.props} />
             ))}
         </tr>
       </thead>

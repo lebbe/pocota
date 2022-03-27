@@ -1,5 +1,8 @@
 import React, { ReactNode, useRef } from 'react'
 import { AddSubscriber } from '../hooks/useSubscribeForRender'
+import { TdProps } from './Td'
+import { ThProps, ThRotatedProps } from './Th'
+import { TheadProps } from './Thead'
 
 type TableProps = React.DetailedHTMLProps<
   React.TableHTMLAttributes<HTMLTableElement>,
@@ -7,7 +10,7 @@ type TableProps = React.DetailedHTMLProps<
 >
 
 export type Header = {
-  content: ReactNode
+  props: ThProps
   frontPromoted?: boolean
   backPromoted?: boolean
   addSubscriber: AddSubscriber
@@ -26,9 +29,9 @@ export type PTableJanitor = {
   headers: Header[]
   currentIndex: number
   // Used temporarily for each row
-  frontElement?: ReactNode
+  frontElement?: TdProps
   addFrontCellSubscriber?: AddSubscriber
-  backElements: ReactNode[]
+  backElements: TdProps[]
   addBackCellSubscribers: AddSubscriber[]
 }
 
@@ -57,7 +60,7 @@ export function Table({
         janitor: useRef<PTableJanitor>({
           currentIndex: 0,
           headers: [],
-          frontElement: null,
+          frontElement: {},
           backElements: [],
 
           addFrontCellSubscriber: undefined,
