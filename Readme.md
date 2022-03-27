@@ -17,7 +17,9 @@ It is hard to find any table component for React similar to this one. Instead of
 This means that you dont have to know advanced programming concepts to start using Pocota. You write the table out plain and regular, and we take care of the polymorphism behind the scenes. Everything you need to remember, is to start the tag name with a big letter (except for the cases where you want a table caption):
 
 ```
-<Table>
+import { Table, Thead, Th, Tbody, Td, Tr } from 'pocota'
+
+<Table rotate={window.innerWidth < 800>}>
   <caption>This is a simple table</caption>
   <Thead>
     <Tr>
