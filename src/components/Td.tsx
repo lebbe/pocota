@@ -2,23 +2,24 @@ import React, { ReactNode, useContext, useLayoutEffect, useState } from 'react'
 
 import { useSubscribeForRender } from '../hooks/useSubscribeForRender'
 import { TableContext } from './Table'
+import { ThProps } from './Th'
 
-type TdProps = React.DetailedHTMLProps<
+export type TdProps = React.DetailedHTMLProps<
   React.TdHTMLAttributes<HTMLTableCellElement>,
   HTMLTableCellElement
 >
 
 function TdRotated(props: TdProps) {
   const context = useContext(TableContext)
-  const [headerElement, setHeaderElement] = useState<ReactNode>(null)
+  const [headerElement, setHeaderElement] = useState<ThProps>({})
   const [promoted, setPromoted] = useState(false)
 
-  const addSubscriber = useSubscribeForRender(props.children)
+  const addSubscriber = useSubscribeForRender(props)
 
   useLayoutEffect(function () {
     const janitor = context.janitor.current
     const header = janitor.headers[janitor.currentIndex++]
-    setHeaderElement(header.content)
+    setHeaderElement(header.props)
 
     if (header.backPromoted) {
       if (header.frontPromoted) {
@@ -27,17 +28,17 @@ function TdRotated(props: TdProps) {
 
       setPromoted(true)
       janitor.addBackCellSubscribers.push(addSubscriber)
-      janitor.backElements.push(props.children)
+      janitor.backElements.push(props)
     }
 
     if (header.frontPromoted) {
-      if (
-        janitor.frontElement !== null &&
+      /*if (
+        janitor.frontElement !== {} &&
         janitor.frontElement !== props.children
       ) {
         throw 'You can only promote one column to the front.'
-      }
-      janitor.frontElement = props.children
+      }*/
+      janitor.frontElement = props
       janitor.addFrontCellSubscriber = addSubscriber
       setPromoted(true)
     }
@@ -52,7 +53,7 @@ function TdRotated(props: TdProps) {
   }
   return (
     <div>
-      <dt>{headerElement}</dt>
+      <dt {...headerElement}></dt>
       <dd {...props} />
     </div>
   )

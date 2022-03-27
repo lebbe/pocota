@@ -3,23 +3,21 @@ import React, { useContext, useLayoutEffect } from 'react'
 import { useSubscribeForRender } from '../hooks/useSubscribeForRender'
 import { TableContext } from './Table'
 
-type ThProps = React.DetailedHTMLProps<
+export type ThProps = React.DetailedHTMLProps<
   React.ThHTMLAttributes<HTMLTableCellElement>,
   HTMLTableCellElement
 >
 
-function ThRotated({
-  front,
-  back,
-  ...props
-}: ThProps & { front?: boolean; back?: boolean }) {
+export type ThRotatedProps = ThProps & { front?: boolean; back?: boolean }
+
+function ThRotated({ front, back, ...props }: ThRotatedProps) {
   const context = useContext(TableContext)
   const janitor = context.janitor.current
-  const addSubscriber = useSubscribeForRender(props.children)
+  const addSubscriber = useSubscribeForRender(props)
 
   useLayoutEffect(function () {
     janitor.headers.push({
-      content: props.children,
+      props,
       frontPromoted: front,
       backPromoted: back,
       addSubscriber: addSubscriber,
@@ -33,11 +31,7 @@ function ThRotated({
   return null
 }
 
-export function Th({
-  front,
-  back,
-  ...props
-}: ThProps & { front?: boolean; back?: boolean }) {
+export function Th({ front, back, ...props }: ThRotatedProps) {
   const context = useContext(TableContext)
   if (context.rotate) return <ThRotated front={front} back={back} {...props} />
   return <th {...props} />

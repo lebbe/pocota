@@ -1,6 +1,7 @@
 import React, { ReactNode, useContext, useLayoutEffect, useState } from 'react'
 
 import { TableContext } from './Table'
+import { TdProps } from './Td'
 import { HeaderContext } from './Thead'
 
 type TrProps = React.DetailedHTMLProps<
@@ -11,15 +12,15 @@ type TrProps = React.DetailedHTMLProps<
 function TrRotated(props: TrProps) {
   const context = useContext(TableContext)
   const inHead = useContext(HeaderContext).insideHeader
-  const [front, setFront] = useState<ReactNode>(null)
-  const [back, setBack] = useState<ReactNode[]>([])
+  const [front, setFront] = useState<TdProps | undefined>(undefined)
+  const [back, setBack] = useState<TdProps[]>([])
 
   useLayoutEffect(function () {
     const janitor = context.janitor.current
     if (janitor.addFrontCellSubscriber) {
       setFront(janitor.frontElement)
 
-      janitor.addFrontCellSubscriber(function (front: ReactNode) {
+      janitor.addFrontCellSubscriber(function (front: TdProps) {
         setFront(front)
       })
     }
@@ -27,7 +28,7 @@ function TrRotated(props: TrProps) {
     if (janitor.backElements.length > 0) {
       setBack(janitor.backElements)
       for (let i = 0; i < janitor.backElements.length; i++) {
-        janitor.addBackCellSubscribers[i](function (td: ReactNode) {
+        janitor.addBackCellSubscribers[i](function (td: TdProps) {
           setBack(function (oldBack) {
             const newBack = [...oldBack]
             newBack[i] = td
@@ -37,7 +38,7 @@ function TrRotated(props: TrProps) {
       }
     }
 
-    janitor.frontElement = null
+    janitor.frontElement = {}
     janitor.backElements = []
     janitor.addFrontCellSubscriber = undefined
     janitor.addBackCellSubscribers = []
@@ -49,12 +50,12 @@ function TrRotated(props: TrProps) {
   }
   return (
     <tr {...props}>
-      {front != null && <td>{front}</td>}
+      {front != null && <td {...front}></td>}
       <td>
         <dl>{props.children}</dl>
       </td>
-      {back.map((content, i) => (
-        <td key={i}>{content}</td>
+      {back.map((props, i) => (
+        <td key={i} {...props}></td>
       ))}
     </tr>
   )
