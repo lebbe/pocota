@@ -60,7 +60,7 @@ function TheSortButton({
  * @returns
  */
 export function useSorter<E extends { [K in keyof E]: string }>(
-  collection: E[],
+  collection: E[] | null,
   options: {
     defaultSortBy?: keyof E
     arrowUp?: JSX.Element
