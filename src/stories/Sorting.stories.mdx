@@ -16,8 +16,8 @@ names as the fields (in the object SortButton).
 
 ```
 function SortedTable(props) {
-  const data = useFetchData()
-  const { sorted, SortButton } = useSorter<DataType>(people)
+  const data = useFetchData<DataType>()
+  const { sorted, SortButton } = useSorter<DataType>(data)
 
   if (sorted === null) return <Loading />
 

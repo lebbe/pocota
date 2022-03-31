@@ -14,18 +14,18 @@ shorter, will only describe the relation between `Td` and
 and `Thead` as well!
 
 ```tsx
-{
-  // From Tr
-}
-;<tr {...props}>
-  {front != null && <td>{front}</td>}
-  <td>
-    <dl>{props.children}</dl>
-  </td>
-  {back.map((content, i) => (
-    <td key={i}>{content}</td>
-  ))}
-</tr>
+// From Tr
+return (
+  <tr {...props}>
+    {front != null && <td {...front}></td>}
+    <td>
+      <dl>{props.children}</dl>
+    </td>
+    {back.map((props, i) => (
+      <td key={i} {...props}></td>
+    ))}
+  </tr>
+)
 ```
 
 One of the problems of doing it like this, is that when the
