@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/lebbe/pocota/actions/workflows/node.js.yml/badge.svg)](https://github.com/lebbe/pocota/actions/workflows/node.js.yml)
 
-Pocota tables is a React 17 responsive table component, that supports a native HTML like experience when creating tables. The output is a simple pure HTML table, that you can style to your own likings.
+Pocota tables is a React 18 responsive table component, that supports a native HTML like experience when creating tables. The output is a simple pure HTML table, that you can style to your own likings.
 
 Pocota can be combined with all sorts of React tools for supporting infinite scroll, sorting, customizable theming, etc. But this library doesn't provide any of this in itself, it provides a simple and straight forward way of making HTML tables, for people who prefer to write their markups as markup, and not as an entangled mess of data-structures.
 
