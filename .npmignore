@@ -1,7 +1,9 @@
-node_modules/
 tsconfig.json
+tsconfig.tests.json
 tsconfig.node.json
 vite.config.tsconfig
 src/stories/
+src/tests/
 docs/
 tests/
+.github/
