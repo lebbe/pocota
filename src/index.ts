@@ -4,6 +4,7 @@ import { Td as TdImport } from './components/Td'
 import { Th as ThImport } from './components/Th'
 import { Thead as TheadImport } from './components/Thead'
 import { Tr as TrImport } from './components/Tr'
+import { Tfoot as TfootImport } from './components/Tfoot'
 
 export const Table = TableImport
 export const Th = ThImport
@@ -11,3 +12,4 @@ export const Thead = TheadImport
 export const Td = TdImport
 export const Tr = TrImport
 export const Tbody = TbodyImport
+export const Tfoot = TfootImport
