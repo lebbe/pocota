@@ -10,9 +10,9 @@ export type TdProps = Omit<
     HTMLTableCellElement
   >,
   'rowSpan'
->
+> & { noHeader?: boolean }
 
-function TdRotated(props: TdProps) {
+function TdRotated({ noHeader, colSpan, ...props }: TdProps) {
   const context = useContext(TableContext)
   const [headerElement, setHeaderElement] = useState<ThProps>({})
   const [promoted, setPromoted] = useState(false)
@@ -24,8 +24,8 @@ function TdRotated(props: TdProps) {
     const header = janitor.headers[janitor.currentIndex++]
     setHeaderElement(header.props)
 
-    if (props.colSpan && props.colSpan > 1) {
-      janitor.currentIndex = janitor.currentIndex + props.colSpan - 1
+    if (colSpan && colSpan > 1) {
+      janitor.currentIndex = janitor.currentIndex + colSpan - 1
     }
 
     if (header.backPromoted) {
@@ -59,6 +59,9 @@ function TdRotated(props: TdProps) {
 
   if (promoted) {
     return null
+  }
+  if (noHeader) {
+    return <div {...props} />
   }
   return (
     <div>
