@@ -4,9 +4,12 @@ import { useSubscribeForRender } from '../hooks/useSubscribeForRender'
 import { TableContext } from './Table'
 import { ThProps } from './Th'
 
-export type TdProps = React.DetailedHTMLProps<
-  React.TdHTMLAttributes<HTMLTableCellElement>,
-  HTMLTableCellElement
+export type TdProps = Omit<
+  React.DetailedHTMLProps<
+    React.TdHTMLAttributes<HTMLTableCellElement>,
+    HTMLTableCellElement
+  >,
+  'rowSpan'
 >
 
 function TdRotated(props: TdProps) {

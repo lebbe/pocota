@@ -3,9 +3,12 @@ import React, { useContext, useLayoutEffect } from 'react'
 import { useSubscribeForRender } from '../hooks/useSubscribeForRender'
 import { TableContext } from './Table'
 
-export type ThProps = React.DetailedHTMLProps<
-  React.ThHTMLAttributes<HTMLTableCellElement>,
-  HTMLTableCellElement
+export type ThProps = Omit<
+  React.DetailedHTMLProps<
+    React.ThHTMLAttributes<HTMLTableCellElement>,
+    HTMLTableCellElement
+  >,
+  'colSpan' | 'rowSpan'
 >
 
 export type ThRotatedProps = ThProps & { front?: boolean; back?: boolean }
