@@ -21,6 +21,10 @@ function TdRotated(props: TdProps) {
     const header = janitor.headers[janitor.currentIndex++]
     setHeaderElement(header.props)
 
+    if (props.colSpan && props.colSpan > 1) {
+      janitor.currentIndex = janitor.currentIndex + props.colSpan - 1
+    }
+
     if (header.backPromoted) {
       if (header.frontPromoted) {
         throw 'A column can only be in the front or in the back, not both.'
