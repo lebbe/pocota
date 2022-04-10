@@ -11,22 +11,24 @@ export default {
   title: 'Examples/Infinite',
 }
 
-export function Example() {
-  const { transactions, loadMoreRef, fill, isLoading } = useInfiniteScroll()
+function Example({ rotated }: { rotated: boolean }) {
+  const { transactions, Button } = useInfiniteScroll()
 
   return (
-    <Table rotate={false}>
+    <Table rotate={rotated}>
       <Thead>
         <Tr>
           <Th>Account name</Th>
           <Th>Acct number</Th>
           <Th>Transaction type</Th>
-          <Th style={{ textAlign: 'right' }}>Amount</Th>
+          <Th style={{ textAlign: 'right' }} back>
+            Amount
+          </Th>
         </Tr>
       </Thead>
       <Tbody>
         {transactions.map((transaction) => (
-          <Tr>
+          <Tr key={transaction.account}>
             <Td>{transaction.name}</Td>
             <Td>{transaction.account}</Td>
             <Td>{transaction.type}</Td>
@@ -34,16 +36,16 @@ export function Example() {
           </Tr>
         ))}
         <Tr>
-          <Td>
-            <button ref={loadMoreRef} onClick={fill}>
-              {isLoading ? 'Loading more...' : 'Load more'}
-            </button>
-          </Td>
-          <Td></Td>
-          <Td></Td>
-          <Td></Td>
+          <Td colSpan={4}>{Button}</Td>
         </Tr>
       </Tbody>
     </Table>
   )
+}
+
+export function Desktop() {
+  return <Example rotated={false}></Example>
+}
+export function Mobile() {
+  return <Example rotated={true}></Example>
 }

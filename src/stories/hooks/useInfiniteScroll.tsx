@@ -1,6 +1,6 @@
 import faker from '@faker-js/faker'
 import { Transaction } from '@faker-js/faker/helpers'
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 function dummyResolver(n: number) {
   return new Promise((resolve) => {
@@ -12,7 +12,7 @@ function dummyResolver(n: number) {
 
 async function getMoreTransactions() {
   await dummyResolver(Math.random() * 100 + 100)
-  return new Array(20).fill(0).map((_) => faker.helpers.createTransaction())
+  return new Array(40).fill(0).map((_) => faker.helpers.createTransaction())
 }
 
 export function useInfiniteScroll() {
@@ -31,6 +31,7 @@ export function useInfiniteScroll() {
     function () {
       if (loadMoreRef.current === null) return
       loadMoreRef.current.addEventListener('visible', fill)
+
       return function () {
         loadMoreRef.current?.removeEventListener('visible', fill)
       }
@@ -43,7 +44,7 @@ export function useInfiniteScroll() {
 
     function callback(entries: any) {
       entries.forEach(function (entry: any) {
-        if (entry.isIntersecting && entry.intersectionRatio >= 1) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.01) {
           loadMoreRef.current?.dispatchEvent(new CustomEvent('visible'))
         }
       })
@@ -51,7 +52,7 @@ export function useInfiniteScroll() {
     let observer = new IntersectionObserver(callback, {
       root: document,
       rootMargin: '0px',
-      threshold: 1.0,
+      threshold: 0.1,
     })
 
     observer.observe(loadMoreRef.current)
@@ -63,10 +64,15 @@ export function useInfiniteScroll() {
     }
   }, [])
 
+  const Button = (
+    <button ref={loadMoreRef} onClick={fill}>
+      {isLoading ? 'Loading more...' : 'Load more'}
+    </button>
+  )
+
   return {
     transactions,
-    loadMoreRef,
-    fill,
     isLoading,
+    Button: Button,
   }
 }
