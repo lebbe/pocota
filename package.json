@@ -18,7 +18,7 @@
   },
   "peerDependencies": {
     "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react-dom": ">=18  .0.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "5.16.4",
@@ -31,6 +31,7 @@
     "@storybook/addon-essentials": "^6.5.0-alpha.60",
     "@storybook/addon-interactions": "^6.5.0-alpha.60",
     "@storybook/addon-links": "^6.5.0-alpha.60",
+    "@storybook/theming": "^6.5.0-alpha.60",
     "@storybook/react": "^6.5.0-alpha.60",
     "@storybook/testing-library": "^0.0.9",
     "babel-loader": "^8.2.4",
