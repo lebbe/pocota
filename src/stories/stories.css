@@ -1,4 +1,4 @@
-button {
+button.sorter-button {
   color: #666;
   background: none;
   border: none;
@@ -13,11 +13,11 @@ button {
   margin: 0 4px;
 }
 
-button:hover {
+button.sorter-button:hover {
   background: #eee;
 }
 
-button .material-icons {
+button.sorter-button .material-icons {
   font-size: 20px;
   position: relative;
   top: 2px;

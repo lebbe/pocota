@@ -31,7 +31,6 @@ function Sorting({ rotated }: { rotated: boolean }) {
 
   if (sortedPeople === null || SortButton === null) return <div>Loading...</div>
 
-  console.log(sortedPeople.length, SortButton)
   return (
     <>
       <link
@@ -48,31 +47,31 @@ function Sorting({ rotated }: { rotated: boolean }) {
           <Tr>
             <Th front>
               Name
-              <SortButton.name />
+              <SortButton.name className="sorter-button" />
             </Th>
             <Th>
               E-mail
-              {!rotate && <SortButton.email />}
+              {!rotate && <SortButton.email className="sorter-button" />}
             </Th>
             <Th>
               Phone
-              {!rotate && <SortButton.phone />}
+              {!rotate && <SortButton.phone className="sorter-button" />}
             </Th>
             <Th>
               City
-              {!rotate && <SortButton.city />}
+              {!rotate && <SortButton.city className="sorter-button" />}
             </Th>
             <Th>
               Company
-              {!rotate && <SortButton.company />}
+              {!rotate && <SortButton.company className="sorter-button" />}
             </Th>
             <Th>
               Username
-              {!rotate && <SortButton.username />}
+              {!rotate && <SortButton.username className="sorter-button" />}
             </Th>
             <Th>
               Website
-              {!rotate && <SortButton.website />}
+              {!rotate && <SortButton.website className="sorter-button" />}
             </Th>
           </Tr>
         </Thead>
