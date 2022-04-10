@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Table, Tbody, Td, Th, Thead, Tr } from '../'
+import { Table, Tbody, Td, Th, Thead, Tr, Tfoot } from '../'
 import { ContactsTable } from './ContactsTable'
 
 export default {
@@ -136,6 +136,206 @@ export function ToggledExample() {
           ))}
         </Tbody>
       </Table>
+    </>
+  )
+}
+
+function PromotedBackHelper({ rotated }: { rotated: boolean }) {
+  const transactions: {
+    date: string
+    merchant: string
+    category: string
+    accountType: string
+    amount: number
+    id: number
+  }[] = [
+    {
+      date: '02.01-2020',
+      merchant: 'Taxi',
+      category: 'Auto/transport',
+      accountType: 'Checking',
+      amount: -5.4,
+      id: 1,
+    },
+    {
+      date: '02.01-2020',
+      merchant: 'Adatum Fitness',
+      category: 'Fitness',
+      accountType: 'Credit Card',
+      amount: -53.7,
+      id: 2,
+    },
+    {
+      date: '03.01-2020',
+      merchant: 'Fourth Coffee',
+      category: 'Restaurant/Dining',
+      accountType: 'Checking',
+      amount: -1.9,
+      id: 3,
+    },
+    {
+      date: '03.01-2020',
+      merchant: 'Taxi',
+      category: 'Auto/Transport',
+      accountType: 'Checking',
+      amount: -6.8,
+      id: 4,
+    },
+    {
+      date: '06.01-2020',
+      merchant: 'Telltale Toys',
+      category: 'Shopping',
+      accountType: 'Checking',
+      amount: -29.9,
+      id: 5,
+    },
+    {
+      date: '06.01-2020',
+      merchant: 'Airline',
+      category: 'Travel',
+      accountType: 'Credit Card',
+      amount: -324,
+      id: 6,
+    },
+  ]
+
+  return (
+    <Table rotate={rotated} detailsTitle="Payments">
+      <caption>List of payments made this month</caption>
+      <Thead>
+        <Tr>
+          <Th>Date</Th>
+          <Th>Merchant</Th>
+          <Th>Category</Th>
+          <Th>Account type</Th>
+          <Th back>Amount</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {transactions.map((transaction) => (
+          <Tr key={transaction.id}>
+            <Td>{transaction.date}</Td>
+            <Td>{transaction.merchant}</Td>
+            <Td>{transaction.category}</Td>
+            <Td>{transaction.accountType}</Td>
+            <Td
+              style={{
+                textAlign: 'right',
+                verticalAlign: 'bottom',
+                paddingBottom: rotated ? '16px' : 'initial',
+              }}
+            >
+              {transaction.amount}
+            </Td>
+          </Tr>
+        ))}
+      </Tbody>
+      <Tfoot>
+        <Tr>
+          <Td colSpan={4} noHeader>
+            <b>Sum</b>
+          </Td>
+          <Td
+            style={{
+              textAlign: 'right',
+            }}
+          >
+            <b>{transactions.map((t) => t.amount).reduce((a, b) => a + b)}</b>
+          </Td>
+        </Tr>
+      </Tfoot>
+    </Table>
+  )
+}
+
+export function PromotedBack() {
+  return (
+    <>
+      <p style={{ maxWidth: 600 }}>
+        Here we see the same table rendered for desktop and mobile. The last
+        column is promoted to the back, which means that on mobile it will still
+        be shown as an ordinary column. This way, we can give the table some
+        extra focus on perhaps the most important figure in the data, the
+        amount, and the sum at the bottom.
+      </p>
+
+      <p style={{ maxWidth: 600 }}>
+        There is three special attributes used to get the mobile version of this
+        table perfect: <code>detailsTitle</code> used on the Table-tag,{' '}
+        <code>back</code>, used in the table header and <code>noHeader</code>,
+        used in the last row, for the sum. See example code at the bottom.
+      </p>
+      <h3>Desktop render</h3>
+      <PromotedBackHelper rotated={false} />
+      <h3>Mobile render</h3>
+      <PromotedBackHelper rotated={true} />
+      <pre>
+        <code>
+          {`
+<Table rotate={rotate} `}
+          <span style={{ color: 'red' }}>detailsTitle</span>=
+          <span style={{ color: 'green' }}>"Payments"</span>
+          {`>
+  <caption>List of payments made this month</caption>
+  <Thead>
+    <Tr>
+      <Th>Date</Th>
+      <Th>Merchant</Th>
+      <Th>Category</Th>
+      <Th>Account type</Th>
+      <Th`}{' '}
+          <span style={{ color: 'red' }}>back</span>
+          {`>Amount</Th>
+    </Tr>
+  </Thead>
+  <Tbody>
+    {transactions.map((transaction) => (
+      <Tr key={transaction.id}>
+        <Td>{transaction.date}</Td>
+        <Td>{transaction.merchant}</Td>
+        <Td>{transaction.category}</Td>
+        <Td>{transaction.accountType}</Td>
+        <Td>{transaction.amount}</Td>
+      </Tr>
+    ))}
+  </Tbody>
+  <Tfoot>
+    <Tr>
+      <Td colSpan={4} `}
+          <span style={{ color: 'red' }}>noHeader</span>
+          {`>
+        <b>Sum</b>
+      </Td>
+      <Td>
+        <b>{SUM}</b>
+      </Td>
+    </Tr>
+  </Tfoot>
+</Table>`}
+        </code>
+      </pre>
+
+      <p>
+        <b>
+          <code>detailsTitle</code>
+        </b>{' '}
+        is the column header for the roated ("summary") column.
+      </p>
+
+      <p>
+        <b>
+          <code>back</code>
+        </b>{' '}
+        promotes the column so it has its own column when table is rotated.
+      </p>
+
+      <p>
+        <b>
+          <code>noHeader</code>
+        </b>{' '}
+        removes the header from the summary cell, because sometimes - like here
+        - the cell is used for something else than the table column.
+      </p>
     </>
   )
 }
