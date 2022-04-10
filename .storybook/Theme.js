@@ -5,5 +5,5 @@ export default create({
   brandTitle: 'Polymorphic Composable Tables',
   brandUrl: 'https://lebbe.github.io/pocota/',
   brandImage:
-    'https://place-hold.it/350x150/000/fff.gif&text=Pocota&bold&fontsize=46',
+    'https://place-hold.it/350x150/f6f9fc/555.png&text=Pocota&bold&fontsize=46',
 })
