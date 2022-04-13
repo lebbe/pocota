@@ -5,10 +5,10 @@
     "module": "ES6",
     "moduleResolution": "node",
     "strict": true,
-    "target": "ES6",
+    "target": "es2018",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
-    "lib": ["ES6", "DOM"],
+    "lib": ["es2018", "DOM"],
     "declaration": true
   },
   "include": ["src/**/*"],
