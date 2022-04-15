@@ -1,9 +1,9 @@
+Readme.md
 tsconfig.json
 tsconfig.tests.json
 tsconfig.node.json
 vite.config.tsconfig
-src/stories/
-src/tests/
+src/
 docs/
 tests/
 .github/
