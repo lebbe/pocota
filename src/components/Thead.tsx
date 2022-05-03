@@ -1,6 +1,6 @@
-import React, { ReactNode, useContext, useLayoutEffect, useState } from 'react'
+import React, { useContext, useLayoutEffect, useState } from 'react'
 import { Header, TableContext } from './Table'
-import { ThProps, ThRotatedProps } from './Th'
+import { ThProps } from './Th'
 
 export type TheadProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLTableSectionElement>,

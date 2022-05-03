@@ -1,8 +1,7 @@
-import React, { ReactNode, useRef } from 'react'
+import React, { useRef } from 'react'
 import { AddSubscriber } from '../hooks/useSubscribeForRender'
 import { TdProps } from './Td'
-import { ThProps, ThRotatedProps } from './Th'
-import { TheadProps } from './Thead'
+import { ThProps } from './Th'
 
 type TableProps = React.DetailedHTMLProps<
   React.TableHTMLAttributes<HTMLTableElement>,

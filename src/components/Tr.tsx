@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext, useLayoutEffect, useState } from 'react'
+import React, { useContext, useLayoutEffect, useState } from 'react'
 
 import { TableContext } from './Table'
 import { TdProps } from './Td'
