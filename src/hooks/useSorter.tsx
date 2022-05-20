@@ -77,15 +77,16 @@ export function useSorter<E extends { [K in keyof E]: string }>(
     options.defaultSortBy
   )
   const [reversed, setReversed] = useState(false)
-  const [SortButton, setSortButton] =
-    useState<{ [K in keyof E]: ButtonType } | null>(null)
+  const [SortButton, setSortButton] = useState<
+    { [K in keyof E]: ButtonType } | null
+  >(null)
   const [isSorting, setIsSorting] = useState(false)
 
   function getSortButtons(
     collection: E[]
   ): { [K in keyof E]: ButtonType } | null {
     if (collection === null) return null
-    // @ts-expect-error
+    // @ts-expect-error initializing with empty object, it will become SortButton eventually
     const SortButton: { [K in keyof E]: ButtonType } = {}
 
     for (const key in collection[0]) {

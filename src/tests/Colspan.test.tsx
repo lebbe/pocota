@@ -1,11 +1,6 @@
-import React, { useState } from 'react'
-import {
-  fireEvent,
-  getByTestId,
-  prettyDOM,
-  render,
-  screen,
-} from '@testing-library/react'
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import React from 'react'
+import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 
 import { Table, Thead, Th, Tbody, Td, Tr } from '..'
