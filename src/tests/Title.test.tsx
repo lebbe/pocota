@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { fireEvent, logRoles, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 
 import { Table, Thead, Th, Tbody, Td, Tr } from '..'

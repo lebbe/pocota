@@ -17,7 +17,9 @@ export type AddSubscriber = (subscriber: Subscriber) => void
  */
 export function useSubscribeForRender(props: ThProps | TdProps): AddSubscriber {
   const [subscriber, setSubscriber] = useState<Subscriber>(
-    () => (_element: ReactNode) => {}
+    () => (_element: ReactNode) => {
+      /* noop */
+    }
   )
 
   useEffect(
